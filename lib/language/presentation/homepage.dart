@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:language_translation/data_fetching/presentation/pages.dart';
+import 'package:language_translation/language/presentation/language_list.dart';
 import 'package:language_translation/language/presentation/services.dart';
 import 'package:provider/provider.dart';
 
@@ -6,12 +8,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProvider>(context);
-    final availableLanguages = {
-      'en': 'English',
-      'es': 'Spanish',
-      'fr': 'French',
-      'de': 'German',
-    };
+    // final availableLanguages = {
+    //   'en': 'English',
+    //   'es': 'Spanish',
+    //   'fr': 'French',
+    //   'de': 'German',
+    // };
 
     return Scaffold(
       appBar: AppBar(
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             DropdownButton<String>(
               value: languageProvider.currentLanguage,
-              items: availableLanguages.entries
+              items: languageList.entries
                   .map(
                     (entry) => DropdownMenuItem(
                       value: entry.key,
@@ -42,7 +44,8 @@ class HomeScreen extends StatelessWidget {
             Text(languageProvider.translate('hello')),
             const SizedBox(height: 10),
             FutureBuilder<String>(
-              future: languageProvider.translateDynamicText('Dynamic data example'),
+              future:
+                  languageProvider.translateDynamicText('Dynamic data example'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return CircularProgressIndicator();
@@ -50,6 +53,10 @@ class HomeScreen extends StatelessWidget {
                 return Text(snapshot.data ?? '...');
               },
             ),
+
+            ElevatedButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostListScreen()));
+            }, child: Text("Move To Post page"))
           ],
         ),
       ),
